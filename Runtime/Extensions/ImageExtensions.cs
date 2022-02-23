@@ -13,6 +13,14 @@ namespace com.spector.Extensions
 
     public static class ImageExtensions
     {
+        /// <summary>
+        /// Asynchronously loads images and creates a Sprite to assign to the Image
+        /// Optionality to listen for success or failure
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="url"></param>
+        /// <param name="resultCallback"></param>
+        /// <param name="textureCallback"></param>
         public static void SetImageFromUrlAsync(
             this Image image,
             string url,
@@ -58,23 +66,10 @@ namespace com.spector.Extensions
             onError?.Invoke(wr.error);
         }
 
-        public static void SetTexture(this Image image, Texture2D texture2d)
-        {
-            image.sprite = CreateNewSprite(texture2d);
-        }
-
-        public static Sprite CreateNewSprite(Texture2D texture2d)
-        {
-            return Sprite.Create(
-                texture2d,
-                new Rect(0, 0, texture2d.width, texture2d.height),
-                Vector2.zero,
-                100,
-                0,
-                SpriteMeshType.FullRect
-            );
-        }
-
+        /// <summary>
+        /// Uses an Aspect Ratio fitter to fit within its parent
+        /// </summary>
+        /// <param name="image"></param>
         public static void EnvelopeParent(this Image image)
         {
             var imageAspect = image.sprite.rect.width / image.sprite.rect.height;

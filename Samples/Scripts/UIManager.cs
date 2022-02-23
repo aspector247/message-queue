@@ -11,7 +11,8 @@ public class UIManager : MonoBehaviour
     public void ShowToast(string title)
     {
         // grab message data from somewhere
-        ToastMessage toastMessage = new ToastMessage(title, "some description", "some url");
+        ToastMessage toastMessage = new ToastMessage(title, "some description",
+            "https://www.4me.com/wp-content/uploads/2018/03/4me-icon-bell.png");
         if(onMessageEvent != null)
             onMessageEvent.Raise(toastMessage);
     }
@@ -20,7 +21,7 @@ public class UIManager : MonoBehaviour
     {
         ModalMessage modalMessage = new ModalMessage("modal title", "modal description", "modal icon", () =>
         {
-            
+            // do something here on Yes button   
         });
         
         if(onMessageEvent != null)

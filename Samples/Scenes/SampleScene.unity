@@ -503,6 +503,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ab8e890d309140e3a3e2b1949fd468b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _queueSerializer: {fileID: 11400000, guid: 956f8d840940f4c6e8ea11150f68512d, type: 2}
   messageQueueConfig: {fileID: 11400000, guid: a84f9a71a28e745afb2d918c49825e47, type: 2}
   messageViewConfigs:
   - {fileID: 11400000, guid: 2a0c396e89de84435bfbba48433a2c74, type: 2}

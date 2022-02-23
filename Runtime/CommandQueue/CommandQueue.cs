@@ -1,20 +1,30 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using com.spector.Attributes;
+using com.spector.CommandQueue.Interfaces;
 using UnityEngine;
 
 namespace com.spector.CommandQueue
 {
+    /// <summary>
+    /// Subclass the CommandQueue to inherit its ability to Queue any type of command and serialize them to disk or db 
+    /// </summary>
     public abstract class CommandQueue : MonoBehaviour
     {
+        [SerializeField] 
+        [RequireInterface(typeof(ICommandQueueSerializer))]
+        private Object _queueSerializer; 
+        public ICommandQueueSerializer QueueSerializer => _queueSerializer as ICommandQueueSerializer;
+        
         // queue of commands
-        protected readonly Queue<ICommand> _queue;
+        protected Queue<ICommand> _queue;
         
         // used by the global config to wait in between messages
         protected float waitForDelay;
         
         // it's not null when a command is running
         private Coroutine _coroutine;
-        
+
         public CommandQueue()
         {
             // create a queue
@@ -74,13 +84,25 @@ namespace com.spector.CommandQueue
         }
 
         /// <summary>
-        /// Saves queue commands with ICommand.Serialize()
+        /// Saves queue commands with queue specific ICommandQueueSerializer
         /// </summary>
-        protected abstract void Save();
+        protected virtual void Save()
+        {
+            var serializer = QueueSerializer as ICommandQueueSerializer;
+            serializer?.Serialize(_queue);
+        }
+
         /// <summary>
-        /// Restores queue commands with ICommand.Deserialize()
+        /// Restores queue commands with queue specific ICommandQueueSerializer
         /// </summary>
-        protected abstract void Restore();
+        protected virtual void Restore()
+        {
+            var serializer = QueueSerializer as ICommandQueueSerializer;
+            if (serializer != null)
+            {
+                _queue = serializer.Deserialize();
+            }
+        }
         
         
     }

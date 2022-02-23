@@ -6,6 +6,10 @@ using UnityEngine;
 
 namespace com.spector.views
 {
+    /// <summary>
+    /// Extend this class to inherit its ability to set a model and transitions of showing and hiding a view
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class MessageView<T> : ViewBase where T : MessageBase
     {
         protected T Model;

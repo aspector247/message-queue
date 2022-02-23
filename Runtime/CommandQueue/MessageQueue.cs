@@ -7,18 +7,21 @@ namespace com.spector.CommandQueue
 {
     /// <summary>
     /// The message queue is used by attaching the component to a game object
-    /// It can process any type of Message that is created.
-    /// In this example we are creating a Toast Message but you could also create a Modal Message too
+    /// It can process any type of Message that is created and sent using the MessageEvent attached to the object
     /// Example usage:
-    /// create a toast message
-    /// ToastMessage toastMessage = new ToastMessage(title, etc);
-    /// toastMessage.show(); or MessageQeue.Show(toastMessage); 
+    /// ToastMessage toastMessage = new ToastMessage(title, "some description", "some url");
+    ///    if(onMessageEvent != null)
+    ///        onMessageEvent.Raise(toastMessage);
     /// </summary>
     public class MessageQueue : CommandQueue
     {
         public MessageQueueConfig messageQueueConfig;
         public MessageViewConfig[] messageViewConfigs;
         
+        /// <summary>
+        /// Send a sublcass of MessageBase and it will create a ShowMessageCommand and queue it to be executed
+        /// </summary>
+        /// <param name="messageBase"></param>
         public void ShowMessage(MessageBase messageBase)
         {
             // find appropriate message view config attached to the MessageQueue
@@ -60,33 +63,6 @@ namespace com.spector.CommandQueue
             }
             return null;
         }
-
-        protected override void Save()
-        {
-            var list = _queue.ToArray();
-            var serializedList = new string[list.Length];
-            for (int i = 0; i < list.Length; i++)
-            {
-                serializedList[i] = list[i].Serialize();
-            }
-
-            Debug.Log($"Saving list: {string.Join(", ", serializedList)}");
-        }
-
-        protected override void Restore()
-        {
-            
-        }
-
-        // private IEnumerator WaitForFrames(int numFrames)
-        // {
-        //     int counter = 0;
-        //     while (counter < numFrames)
-        //     {
-        //         counter++;
-        //         yield return new WaitForEndOfFrame();    
-        //     }
-        // }
     }
 }
 
