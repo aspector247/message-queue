@@ -1,0 +1,25 @@
+{
+  "name": "com.spector.messagequeue",
+  "version": "0.1.0",
+  "displayName": "Message Queue",
+  "description": "Toast Messages",
+  "unity": "2020.3",
+  "dependencies": {
+  },
+  "samples": [
+    {
+      "displayName": "Toast Sample",
+      "description": "Contains examples for how to create new message types and message views",
+      "path": "Samples/"
+    }
+  ],
+  "keywords": [
+    "messages",
+    "game events"
+  ],
+  "author": {
+    "name": "Adam Spector",
+    "email": "aspector247@gmail.com",
+    "url": ""
+  }
+}
