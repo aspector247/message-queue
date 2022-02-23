@@ -20,10 +20,13 @@ You will noticed that a new message will be queued to show one after the other.
 Tap the Show Modal button and you'll see how the system can be extended to support many different types of messages.
 
 ## Usage
-In the SampleScene, take a look at the MessageQueue Object. You will see:
-  1. A MessageQueue behaviour with a MessageQueueConfig that is a global setting for determining how long to show the message before hiding and how many seconds to delay the next message. There is also a list of MessageViewConfigs that determine which views are supported. In this example we have added a ToastView and a ModalView.
-  2. The MessageEventListener component listens to an instance of a ScriptableObject called MessageEvent that is also attached to the UIManager and sends either a ToastMessage or a ModalMessage to the ShowMessage method on the MessageQueue. This just illustrates that you can create and send any type of MessageBase to the MessageQueue.
-  3. The ToastMessage can either be created in code or if you are calling a service it can be deserialized into its correct form with an example such as: { "Name": "toast", "Title": "my title", "Description": "my description", "Icon": "some url or relative asset" }
+![alt text](https://github.com/aspector247/message-queue/blob/master/Samples/Images/message-queue-component.png "Message Queue Component")
+In the SampleScene, take a look at the MessageQueue component. To use it you will need to create:
+  1. A QueueSerializer - responsible for saving the state of your message queue if app crashes or user closes.
+  2. A MessageQueueConfig that is a global setting for determining how long to show the message before hiding and how many seconds to delay the next message. 
+  3. A list of MessageViewConfigs that determine which views are supported. In this example we have added a ToastView and a ModalView.
+  4. The MessageEventListener component listens to an instance of a ScriptableObject called MessageEvent that is also attached to the UIManager ![alt text](https://github.com/aspector247/message-queue/blob/master/Samples/Images/ui-manager-component.png "UI Manager") and sends either a ToastMessage or a ModalMessage to the ShowMessage method on the MessageQueue. This just illustrates that you can create and send any type of MessageBase to the MessageQueue.
+  5. The ToastMessage can either be created in code or if you are calling a service it can be deserialized into its correct form with an example such as: { "Name": "toast", "Title": "my title", "Description": "my description", "Icon": "some url or relative asset" }
 
 ## Creating a SuperToastView
   1. Create your view similar to the ToastView. Decide if you need a new ToastView class for different functionality.
