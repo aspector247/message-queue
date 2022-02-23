@@ -4,13 +4,11 @@
   "displayName": "Message Queue",
   "description": "Toast Messages",
   "unity": "2020.3",
-  "dependencies": {
-  },
   "samples": [
     {
       "displayName": "Toast Sample",
       "description": "Contains examples for how to create new message types and message views",
-      "path": "Samples/"
+      "path": "Samples/Toast"
     }
   ],
   "keywords": [
@@ -21,5 +19,7 @@
     "name": "Adam Spector",
     "email": "aspector247@gmail.com",
     "url": ""
-  }
+  },
+  "type": "library",
+  "documentationUrl": "https://github.com/aspector247/message-queue"
 }
