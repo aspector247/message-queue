@@ -5,7 +5,6 @@ using com.spector.CommandQueue.Commands;
 using com.spector.CommandQueue.Messages;
 using com.spector.CommandQueue.Messages.Config;
 using NUnit.Framework;
-using Scriptables.MessageConfigs;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -13,34 +12,25 @@ using UnityEngine.TestTools;
 public class MessageQueueTests
 {
     private ToastMessage _toastMessage;
-    //private ModalMessage _modalMessage;
     
     private string jsonToast =
-        "{ \"Name\": \"toast\", \"Title\": \"my title\", \"Description\": \"my description\", \"Icon\": \"some url or relative asset\" }";
-    private string jsonModal =
-        "{ \"Name\": \"modal\", \"Title\": \"my title\", \"Description\": \"my description\", \"Icon\": \"some url or relative asset\" }";
-    
+        "{ \"Name\": \"toast\", \"Title\": \"my title\", \"Description\": \"my description\", \"IconUrl\": \"https://www.4me.com/wp-content/uploads/2018/03/4me-icon-bell.png\" }";
+
     [SetUp]
     public void Setup()
     {
-        _toastMessage = (ToastMessage)MessageFactory.FromJson(jsonToast);
-        //_modalMessage = (ModalMessage)MessageFactory.FromJson(jsonModal);
+        _toastMessage = (ToastMessage) MessageFactory.FromJson(jsonToast);
     }
-    
+
     // A Test behaves as an ordinary method
     [Test]
     public void MessageQueueTest_CreateToastMessageFromJson()
     {
         Assert.AreEqual("toast", _toastMessage.Name, "Name should be toast");
         Assert.AreEqual("my title", _toastMessage.Title, "Title should be my title");
+        Assert.AreEqual("my description", _toastMessage.Description, "Description should be my description");
+        Assert.AreEqual("https://www.4me.com/wp-content/uploads/2018/03/4me-icon-bell.png", _toastMessage.IconUrl, "url should match");
     }
-    
-    // [Test]
-    // public void MessageQueueTest_CreateModalMessageFromJson()
-    // {
-    //     Assert.AreEqual("modal", _modalMessage.Name, "Name should be modal");
-    //     Assert.AreEqual("my title", _modalMessage.Title, "Title should be my title");
-    // }
 
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
@@ -54,17 +44,9 @@ public class MessageQueueTests
         // create a message view config to populate with test data
         var messageViewConfig = ScriptableObject.CreateInstance<MessageViewConfig>();
         
-        // create a toast label and model
-        MessageModelLocator toast = ScriptableObject.CreateInstance<MessageModelLocator>();
-        toast.name = "toast";
-        var messageBase = (MessageBase) Activator.CreateInstance(toast.modelClass.GetType());
-        //messageViewConfig.MessageLabelModel = ScriptableObject
-        // assign the ToastView to be used for this message
-        //messageViewConfig.MessageBase = ScriptableObject.CreateInstance<ToastMessage>();
-        //messageViewConfig.MessageBase.Name = "toast";
-        messageViewConfig.messageModelLocator = toast;
+        // use an existing toast model locator which is used as a reference for deserializing JSON
         messageViewConfig.prefab =
-            (GameObject)AssetDatabase.LoadAssetAtPath("Packages/com.spector.messagequeue/Sample/Prefabs/ToastView.prefab", typeof(GameObject));
+            (GameObject)AssetDatabase.LoadAssetAtPath("Packages/com.spector.messagequeue/Samples/Toast/Prefabs/ToastView.prefab", typeof(GameObject));
         
         // create global message queue config for default control
         MessageQueueConfig messageQueueConfig = ScriptableObject.CreateInstance<MessageQueueConfig>();
@@ -73,7 +55,7 @@ public class MessageQueueTests
         messageQueue.messageViewConfigs = new MessageViewConfig[] { messageViewConfig };
         
         // create and enqueue the command
-        var command = new ShowMessageCommand(messageQueueConfig, messageViewConfig, messageBase);
+        var command = new ShowMessageCommand(messageQueueConfig, messageViewConfig, _toastMessage);
         messageQueue.Enqueue(command);
 
         yield return null;

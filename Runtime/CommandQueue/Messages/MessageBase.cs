@@ -1,6 +1,4 @@
 using System;
-using com.spector.GameEvents;
-using UnityEngine;
 
 namespace com.spector.CommandQueue.Messages
 {
