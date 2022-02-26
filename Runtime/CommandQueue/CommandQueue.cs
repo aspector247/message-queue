@@ -24,6 +24,7 @@ namespace com.spector.CommandQueue
         
         // it's not null when a command is running
         private Coroutine _coroutine;
+        private bool _isPending;
 
         public CommandQueue()
         {
@@ -47,7 +48,7 @@ namespace com.spector.CommandQueue
         public void DoNext()
         {
             // if queue is empty, do nothing.
-            if (_queue.Count == 0)
+            if (_queue.Count == 0 || _isPending)
                 return;
 
             // get a command
@@ -57,6 +58,7 @@ namespace com.spector.CommandQueue
             cmd.OnFinished += OnCmdFinished;
             
             // execute command
+            _isPending = true;
             _coroutine = StartCoroutine(ExecuteNextCommand(cmd));
         }
 
@@ -70,6 +72,7 @@ namespace com.spector.CommandQueue
         {
             // current command is finished
             _coroutine = null;
+            _isPending = false;
 
             // wait for next command based on wait delay
             StartCoroutine(WaitForNext());

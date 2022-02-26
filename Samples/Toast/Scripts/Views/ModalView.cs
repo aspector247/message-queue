@@ -14,11 +14,15 @@ public class ModalView : MessageView<ModalMessage>
     
     public override void Show(float duration)
     {
+        icon.enabled = false;
         this.gameObject.SetActive(true);
             
         title.text = Model.Title;
         description.text = Model.Description;
-        icon.SetImageFromUrlAsync(Model.IconUrl);
+        icon.SetImageFromUrlAsync(Model.IconUrl, result =>
+        {
+            icon.enabled = true;
+        });
 
         if (okay != null)
         {

@@ -13,6 +13,8 @@ namespace com.spector.views
     public class MessageView<T> : ViewBase where T : MessageBase
     {
         protected T Model;
+        
+        // customize your animations with this interface
         private IViewTransition _viewTransition;
         
         private void Awake()
@@ -22,11 +24,13 @@ namespace com.spector.views
 
         public override void SetModel(object model)
         {
+            // cast the object to the type T specified by the view
             Model = model != null ? (T) model : Activator.CreateInstance<T>();
         }
         
         public override void Show(float duration)
         {
+            // if there is a view transition attached use it, otherwise hide view after the duration
             if (_viewTransition != null)
             {
                 _viewTransition.Show(() =>
@@ -56,17 +60,18 @@ namespace com.spector.views
         {
             if (_viewTransition != null)
             {
-                _viewTransition.Hide(() =>
-                {
-                    Model.OnClose?.Invoke();
-                    Destroy(this.gameObject);
-                });
+                _viewTransition.Hide(CloseAndDestroy);
             }
             else
             {
-                Model.OnClose?.Invoke();
-                Destroy(this.gameObject);
+                CloseAndDestroy();
             }
+        }
+
+        private void CloseAndDestroy()
+        {
+            Model.OnClose?.Invoke();
+            Destroy(this.gameObject);
         }
     }
 }

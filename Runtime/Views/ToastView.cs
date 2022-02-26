@@ -13,11 +13,18 @@ namespace com.spector.views
         
         public override void Show(float duration)
         {
+            // hide the icon until we have loaded it
+            icon.enabled = false;
             this.gameObject.SetActive(true);
             
             title.text = Model.Title;
             description.text = Model.Description;
-            icon.SetImageFromUrlAsync(Model.IconUrl);
+            
+            // load the image and enable it once loaded or fallback to default if error
+            icon.SetImageFromUrlAsync(Model.IconUrl, result =>
+            {
+                icon.enabled = true;
+            });
             
             base.Show(duration);
         }
