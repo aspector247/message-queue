@@ -1,14 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using com.spector.CommandQueue;
 using com.spector.CommandQueue.Commands;
 using com.spector.CommandQueue.Messages;
 using com.spector.CommandQueue.Messages.Config;
 using NUnit.Framework;
 using Samples.Scripts.Serializer;
-using Tests.Editor;
 using Unity.Plastic.Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
@@ -38,7 +36,7 @@ public class MessageQueueTests
         
         // use an existing toast model locator which is used as a reference for deserializing JSON
         _messageViewConfig.prefab =
-            (GameObject)AssetDatabase.LoadAssetAtPath("Packages/com.spector.messagequeue/Samples/Toast/Prefabs/ToastView.prefab", typeof(GameObject));
+            (GameObject)AssetDatabase.LoadAssetAtPath("Packages/com.spector.messagequeue/Tests/Editor/Prefabs/ToastView.prefab", typeof(GameObject));
         
         // create global message queue config for default control
         _messageQueueConfig = ScriptableObject.CreateInstance<MessageQueueConfig>();
@@ -71,7 +69,7 @@ public class MessageQueueTests
         
         // use an existing toast model locator which is used as a reference for deserializing JSON
         messageViewConfig.prefab =
-            (GameObject)AssetDatabase.LoadAssetAtPath("Packages/com.spector.messagequeue/Samples/Toast/Prefabs/ToastView.prefab", typeof(GameObject));
+            (GameObject)AssetDatabase.LoadAssetAtPath("Packages/com.spector.messagequeue/Tests/Editor/Prefabs/ToastView.prefab", typeof(GameObject));
         
         // create global message queue config for default control
         MessageQueueConfig messageQueueConfig = ScriptableObject.CreateInstance<MessageQueueConfig>();
@@ -122,7 +120,7 @@ public class MessageQueueTests
         
         // use an existing toast model locator which is used as a reference for deserializing JSON
         messageViewConfig.prefab =
-            (GameObject)AssetDatabase.LoadAssetAtPath("Packages/com.spector.messagequeue/Samples/Toast/Prefabs/ToastView.prefab", typeof(GameObject));
+            (GameObject)AssetDatabase.LoadAssetAtPath("Packages/com.spector.messagequeue/Tests/Editor/Prefabs/ToastView.prefab", typeof(GameObject));
         
         // create global message queue config for default control
         MessageQueueConfig messageQueueConfig = ScriptableObject.CreateInstance<MessageQueueConfig>();

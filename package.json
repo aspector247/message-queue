@@ -1,6 +1,6 @@
 {
   "name": "com.spector.messagequeue",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "displayName": "Message Queue",
   "description": "Toast Messages",
   "unity": "2020.3",
@@ -8,7 +8,7 @@
     {
       "displayName": "Toast Sample",
       "description": "Contains examples for how to create new message types and message views",
-      "path": "Samples/Toast"
+      "path": "Samples~/Toast"
     }
   ],
   "keywords": [

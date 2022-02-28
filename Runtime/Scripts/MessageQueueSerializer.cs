@@ -39,9 +39,10 @@ namespace Samples.Scripts.Serializer
             if (PlayerPrefs.HasKey("message_queue"))
             {
                 List<string> list = JsonConvert.DeserializeObject<List<string>>(PlayerPrefs.GetString("message_queue"));
+                
                 if (list != null)
                 {
-                    var deserializedList = new string[list.Count];
+                    Debug.Log($"Deserializing queue: {string.Join(",", list)}");
                     for (int i = 0; i < list.Count; i++)
                     {
                         // grab the first serialized command
