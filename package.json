@@ -1,6 +1,6 @@
 {
   "name": "com.spector.messagequeue",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "displayName": "Message Queue",
   "description": "Toast Messages",
   "unity": "2020.3",
