@@ -1,6 +1,9 @@
+using System;
+using System.Reflection;
 using com.spector.CommandQueue.Commands;
 using com.spector.CommandQueue.Messages;
 using com.spector.CommandQueue.Messages.Config;
+using com.spector.views;
 using UnityEngine;
 
 namespace com.spector.CommandQueue
@@ -9,7 +12,7 @@ namespace com.spector.CommandQueue
     /// The message queue is used by attaching the component to a game object
     /// It can process any type of Message that is created and sent using the MessageEvent attached to the object
     /// Example usage:
-    /// ToastMessage toastMessage = new ToastMessage(title, "some description", "some url");
+    /// ToastMessage toastMessage = new ToastMessage("title", "some description", "some url");
     ///    if(onMessageEvent != null)
     ///        onMessageEvent.Raise(toastMessage);
     /// </summary>
@@ -25,7 +28,7 @@ namespace com.spector.CommandQueue
         public void ShowMessage(MessageBase messageBase)
         {
             // find appropriate message view config attached to the MessageQueue
-            MessageViewConfig messageViewConfig = GetMessageViewConfig(messageBase.Name);
+            MessageViewConfig messageViewConfig = GetMessageViewConfig(messageBase.GetType().FullName);
             
             if (messageViewConfig == null)
             {
@@ -33,7 +36,7 @@ namespace com.spector.CommandQueue
                 return;
             }
             
-            // sets up in between delay from config
+            // delay before processing the next command
             waitForDelay = messageQueueConfig.DelayNext;
             
             // create and enqueue the command
@@ -44,25 +47,32 @@ namespace com.spector.CommandQueue
         }
         
         /// <summary>
-        /// Finds an attached MessageViewConfig based on the messages name. ie toast or modal
+        /// Finds an attached MessageViewConfig based on the MessageBase FullName
         /// </summary>
-        /// <param name="messageName"></param>
+        /// <param name="messageClassName"></param>
         /// <returns></returns>
-        private MessageViewConfig GetMessageViewConfig(string messageName)
+        public MessageViewConfig GetMessageViewConfig(string messageClassName)
         {
             if (messageViewConfigs != null)
             {
                 for (int i = 0; i < messageViewConfigs.Length; i++)
                 {
                     MessageViewConfig messageViewConfig = messageViewConfigs[i];
-                    if (messageViewConfig.messageModelLocator.name == messageName)
+                    ViewBase viewBase = messageViewConfig.prefab.GetComponent<ViewBase>();
+                    if (viewBase != null)
                     {
-                        return messageViewConfig;
+                        // use the view base class to determine the generic model name since we follow MessageView<Model> 
+                        if (viewBase.GetType().BaseType?.GetGenericArguments()[0].FullName == messageClassName)
+                        {
+                            return messageViewConfig;
+                        }
                     }
                 }
             }
             return null;
         }
+        
+        
     }
 }
 

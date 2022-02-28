@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using com.spector.Attributes;
 using com.spector.CommandQueue.Interfaces;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace com.spector.CommandQueue
 {
@@ -14,22 +16,44 @@ namespace com.spector.CommandQueue
         [SerializeField] 
         [RequireInterface(typeof(ICommandQueueSerializer))]
         private Object _queueSerializer; 
-        public ICommandQueueSerializer QueueSerializer => _queueSerializer as ICommandQueueSerializer;
-        
+        public ICommandQueueSerializer QueueSerializer
+        {
+            get => _queueSerializer as ICommandQueueSerializer;
+            set => _queueSerializer = (Object) value;
+        }
+
+        /// <summary>
+        /// If true, the message queue will start executing on instantiation
+        /// </summary>
+        [SerializeField]
+        public bool PlayOnStart = false;
+
         // queue of commands
-        protected Queue<ICommand> _queue;
-        
+        [SerializeField] private Queue<ICommand> _queue = new Queue<ICommand>();
+
+        public Queue<ICommand> Queue => _queue;
+
         // used by the global config to wait in between messages
         protected float waitForDelay;
         
         // it's not null when a command is running
         private Coroutine _coroutine;
-        private bool _isPending;
+        private bool _isProcessing;
+        
+
+        private void OnEnable()
+        {
+            if (QueueSerializer != null)
+            {
+                _queue = QueueSerializer.Deserialize();
+                _isProcessing = !PlayOnStart; // pause queue if not play on start
+                DoNext();
+            }
+        }
 
         public CommandQueue()
         {
-            // create a queue
-            _queue = new Queue<ICommand>();
+            _isProcessing = !PlayOnStart; // pause queue if not play on start
         }
 
         public void Enqueue(ICommand cmd)
@@ -45,10 +69,20 @@ namespace com.spector.CommandQueue
                 DoNext();
         }
 
+        public void Stop()
+        {
+            _isProcessing = true;
+        }
+
+        public void Play()
+        {
+            _isProcessing = false;
+        }
+
         public void DoNext()
         {
             // if queue is empty, do nothing.
-            if (_queue.Count == 0 || _isPending)
+            if (_queue.Count == 0 || _isProcessing)
                 return;
 
             // get a command
@@ -58,8 +92,13 @@ namespace com.spector.CommandQueue
             cmd.OnFinished += OnCmdFinished;
             
             // execute command
-            _isPending = true;
+            _isProcessing = true;
             _coroutine = StartCoroutine(ExecuteNextCommand(cmd));
+        }
+
+        public void Clear()
+        {
+            _queue.Clear();
         }
 
         // yields for command so we can wait frames or seconds
@@ -72,8 +111,11 @@ namespace com.spector.CommandQueue
         {
             // current command is finished
             _coroutine = null;
-            _isPending = false;
-
+            _isProcessing = false;
+            
+            // when the command is finished we need to save the current state 
+            Save();
+            
             // wait for next command based on wait delay
             StartCoroutine(WaitForNext());
         }
@@ -106,7 +148,7 @@ namespace com.spector.CommandQueue
                 _queue = serializer.Deserialize();
             }
         }
-        
-        
+
+
     }
 }

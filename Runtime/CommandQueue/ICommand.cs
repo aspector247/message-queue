@@ -3,11 +3,11 @@ using System.Collections;
 
 namespace com.spector.CommandQueue
 {
-    public interface ICommand
+    public interface ICommand : IEquatable<ICommand>
     {
         Action OnFinished { get; set; }
         IEnumerator Execute();
         string Serialize();
-        object Deserialize(string json);
+        ICommand Deserialize(string json);
     }
 }

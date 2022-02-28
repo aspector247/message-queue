@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace com.spector.CommandQueue.Messages
 {
-    public class ToastMessage : MessageBase
+    public class ToastMessage : MessageBase, IEquatable<ToastMessage>
     {
         public string Title;
         public string Description;
@@ -17,6 +17,22 @@ namespace com.spector.CommandQueue.Messages
             Title = title;
             Description = description;
             IconUrl = iconUrl;
+        }
+
+        public override bool Equals(MessageBase obj)
+        {
+            return Equals((ToastMessage) obj);
+        }
+
+        public bool Equals(ToastMessage other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            if (other.GetType() != this.GetType()) return false;
+            return Name.Equals(other.Name) &&
+                   Title.Equals(other.Title) &&
+                   Description.Equals(other.Description) &&
+                   IconUrl.Equals(other.IconUrl);
         }
 
         public override string ToString()

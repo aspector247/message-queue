@@ -504,6 +504,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _queueSerializer: {fileID: 11400000, guid: 6d20878ed8a1b4e7296f33cbff2aab62, type: 2}
+  PlayOnStart: 1
   messageQueueConfig: {fileID: 11400000, guid: c75c0e8fea504447580e51276e561a77, type: 2}
   messageViewConfigs:
   - {fileID: 11400000, guid: c18dc39539fd6452d9a212859dfdb495, type: 2}
