@@ -7,6 +7,8 @@ Open Unity Package Manager
 
 Choose Add package from Git url: https://github.com/aspector247/message-queue.git
 
+Find the Message Queue package and rename the folder Samples to Samples~
+This is necessary until I create a github action to automatically change this file name.
 Import Samples folder
 
 Open the Sample Scene - you may be prompted to install Text Mesh Pro Essentials that exist in the scene.
